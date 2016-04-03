@@ -1,5 +1,6 @@
 package tech.allegro.io.twitter.reader;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
@@ -15,11 +16,12 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import tech.allegro.io.twitter.config.TwitterAccessProperties;
+import tech.allegro.io.twitter.domain.Twitt;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class TwitterStreamItemReader<T extends String> implements ItemStreamReader<T> {
+public class TwitterStreamItemReader implements ItemStreamReader<Twitt> {
     private BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
     private StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
     private Client client;
@@ -34,8 +36,9 @@ public class TwitterStreamItemReader<T extends String> implements ItemStreamRead
     }
 
     @Override
-    public T read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        return (T) queue.take();
+    public Twitt read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(queue.take(), Twitt.class);
     }
 
     @Override

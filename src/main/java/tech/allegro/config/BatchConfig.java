@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import tech.allegro.domain.Product;
 import tech.allegro.io.twitter.config.TwitterAccessProperties;
+import tech.allegro.io.twitter.domain.Twitt;
 import tech.allegro.io.twitter.reader.TwitterStreamItemReader;
 import tech.allegro.mapper.ProductItemProcessor;
 
@@ -40,7 +41,7 @@ public class BatchConfig {
 
     // tag::readerwriterprocessor[]
     @Bean
-    public TwitterStreamItemReader<String> reader() {
+    public TwitterStreamItemReader reader() {
         return new TwitterStreamItemReader(accessProperties);
     }
 
@@ -82,7 +83,7 @@ public class BatchConfig {
     @Bean
     public Step consumeTweeterStream() {
         return stepBuilderFactory.get("consumeTweeterStream")
-                .<String, Product>chunk(10)
+                .<Twitt, Product>chunk(10)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
