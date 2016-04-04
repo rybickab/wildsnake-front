@@ -8,9 +8,6 @@ import tech.allegro.mapper.exception.ProcessingException;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by jakub.westfalewski on 3/21/16.
- */
 public class ProductItemProcessorTest {
     private ProductItemProcessor productItemProcessor;
 

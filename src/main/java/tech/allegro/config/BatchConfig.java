@@ -1,7 +1,7 @@
 package tech.allegro.config;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.batch.core.ItemReadListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +38,9 @@ public class BatchConfig {
     public DataSource dataSource;
 
     @Autowired
-    private TwitterAccessProperties accessProperties;
+    private ItemStreamReader<Twitt> itemStreamReader;
 
     // tag::readerwriterprocessor[]
-    @Bean
-    public TwitterStreamItemReader reader() {
-        return new TwitterStreamItemReader(accessProperties);
-    }
 
     @Bean
     public ProductItemProcessor processor() {
@@ -75,16 +72,16 @@ public class BatchConfig {
         return jobBuilderFactory.get("importProductsJob")
                 .incrementer(new RunIdIncrementer())
                 .listener(listener())
-                .flow(consumeTweeterStream())
+                .flow(consumeTwitterStream())
                 .end()
                 .build();
     }
 
     @Bean
-    public Step consumeTweeterStream() {
-        return stepBuilderFactory.get("consumeTweeterStream")
-                .<Twitt, Product>chunk(10)
-                .reader(reader())
+    public Step consumeTwitterStream() {
+        return stepBuilderFactory.get("consumeTwitterStream")
+                .<Twitt,Product>chunk(10)
+                .reader(itemStreamReader)
                 .processor(processor())
                 .writer(writer())
                 .build();

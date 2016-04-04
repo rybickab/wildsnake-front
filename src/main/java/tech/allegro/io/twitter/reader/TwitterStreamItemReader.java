@@ -15,6 +15,7 @@ import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.annotation.Autowired;
 import tech.allegro.io.twitter.config.TwitterAccessProperties;
 import tech.allegro.io.twitter.domain.Twitt;
 
@@ -23,10 +24,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class TwitterStreamItemReader implements ItemStreamReader<Twitt> {
     private BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
-    private StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
     private Client client;
     private final TwitterAccessProperties accessProperties;
 
+    @Autowired
     public TwitterStreamItemReader(TwitterAccessProperties accessProperties) {
         this.accessProperties = accessProperties;
         System.out.println(accessProperties.getAccessToken());
@@ -43,6 +44,7 @@ public class TwitterStreamItemReader implements ItemStreamReader<Twitt> {
 
     @Override
     public void open(ExecutionContext executionContext) throws ItemStreamException {
+        StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
         endpoint.trackTerms(Lists.newArrayList("snake"));
         Authentication auth = new OAuth1(accessProperties.getConsumerKey(),
                 accessProperties.getConsumerSecret(),
