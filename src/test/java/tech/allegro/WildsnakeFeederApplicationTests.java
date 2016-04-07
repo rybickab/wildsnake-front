@@ -24,20 +24,12 @@ import static org.hamcrest.core.Is.is;
 public class WildsnakeFeederApplicationTests {
 	private static final String deleteSql = "DELETE FROM product";
 
-	@Autowired
-	JobLauncherTestUtils jobLauncherTestUtils;
-
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	@Autowired
-	TestTwittItemReader itemStreamReader;
-
 	@Test
-	public void contextLoads() throws Exception{
+	public void shouldFinishJobSuccessfully() throws Exception{
 		//given
-		itemStreamReader.addStubTwitt(new Twitt("wolny Waz za 50 USD w pelni legalny"));
-		
+		itemStreamReader.addStubTwitt(new Twitt("wolny wąż za 50 USD w pelni legalny"));
+		itemStreamReader.addStubTwitt(new Twitt("szybki wąż za 100 USD też legal"));
+
 		//when
 		JobExecution jobExecution = jobLauncherTestUtils.launchJob();
 		StepExecution firstStepExecution = jobExecution.getStepExecutions().iterator().next();
@@ -50,4 +42,13 @@ public class WildsnakeFeederApplicationTests {
 	public void setup() {
 		jdbcTemplate.update(deleteSql);
 	}
+
+	@Autowired
+	JobLauncherTestUtils jobLauncherTestUtils;
+
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	TestTwittItemReader itemStreamReader;
 }

@@ -14,7 +14,7 @@ import tech.allegro.io.twitter.reader.TwitterStreamItemReader;
 public class TwitterStreamItemReaderConfig {
 
     @Autowired
-    private TwitterAccessProperties accessProperties;
+    TwitterAccessProperties accessProperties;
 
     @Bean
     public ItemStreamReader<Twitt> twittReader() {
