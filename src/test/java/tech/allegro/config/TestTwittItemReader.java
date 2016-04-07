@@ -29,13 +29,7 @@ public class TestTwittItemReader implements ItemStreamReader<Twitt> {
 
     @Override
     public void open(ExecutionContext executionContext) throws ItemStreamException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            queue.add(objectMapper.writeValueAsString(new Twitt("Szybki wąż za 50 USD legalny")));
-            queue.add(objectMapper.writeValueAsString(new Twitt("Wolny wąż za 20 USD tez legalny")));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -46,5 +40,10 @@ public class TestTwittItemReader implements ItemStreamReader<Twitt> {
     @Override
     public void close() throws ItemStreamException {
 
+    }
+
+    public void addStubTwitt(Twitt twitt) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        queue.add(objectMapper.writeValueAsString(twitt));
     }
 }

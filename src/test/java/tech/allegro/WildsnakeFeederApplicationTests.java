@@ -12,6 +12,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import tech.allegro.config.TestTwittItemReader;
+import tech.allegro.io.twitter.domain.Twitt;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -22,15 +24,20 @@ import static org.hamcrest.core.Is.is;
 public class WildsnakeFeederApplicationTests {
 	private static final String deleteSql = "DELETE FROM product";
 
-
 	@Autowired
 	JobLauncherTestUtils jobLauncherTestUtils;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	TestTwittItemReader itemStreamReader;
+
 	@Test
 	public void contextLoads() throws Exception{
+		//given
+		itemStreamReader.addStubTwitt(new Twitt("wolny Waz za 50 USD w pelni legalny"));
+		
 		//when
 		JobExecution jobExecution = jobLauncherTestUtils.launchJob();
 		StepExecution firstStepExecution = jobExecution.getStepExecutions().iterator().next();
