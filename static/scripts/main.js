@@ -1,5 +1,5 @@
 function wildsnakeCtrl($http) {
-  $http.get('http://localhost:8080/api/v1/products').then(response => this.products = response.data);
+  $http.get('https://wildsnake-jjdlugosz.herokuapp.com/api/v1/products').then(response => this.products = response.data);
 }
 
 function wildsnakeConfig ($interpolateProvider) {
