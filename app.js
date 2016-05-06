@@ -2,6 +2,8 @@ var express = require('express');
 var exphbs = require('express-handlebars');
 
 var app = express();
+var port = process.env.PORT || 8080;
+
 
 app.use(express.static('static'));
 app.engine('.html', exphbs({extname: '.html'}));
@@ -11,6 +13,6 @@ app.get('/', function (req, res) {
   res.render('index');
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.listen(port, function () {
+  console.log('Wildsnake listening on port ' + port);
 });
