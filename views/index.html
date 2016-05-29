@@ -15,7 +15,7 @@
   <h1 class="products-header">Top products</h1>
 
   <ul class="product-grid">
-    <li class="item" ng-repeat="product in ctrl.products">
+    <li class="item" ng-repeat="product in ctrl.products | unique: 'description':'name':'price':'image'">
       <img class="product-image" src="[[product.imageUrl]]" title="[[product.description]]" />
       <div class="bottom-row">
         <div class="pull-left">[[product.name]]</div>
