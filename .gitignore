@@ -1,0 +1,10 @@
+.idea
+*.iml
+*.ipr
+*.iws
+.gradle
+build
+classes
+.DS_Store
+.nb-gradle
+node_modules/
